@@ -1,7 +1,7 @@
-// components/Text.tsx
 import React from "react";
 import { Text as RNText, StyleSheet, TextStyle } from "react-native";
 import { TextProps, TTextOption } from "./types";
+import { getFontSize } from "./getFontSize";
 
 const getStyleByOption = (option: TTextOption): TextStyle => {
   switch (option) {
@@ -24,17 +24,17 @@ const Text = ({ option = "body", style, ...props }: TextProps) => {
 const styles = StyleSheet.create({
   header: {
     fontFamily: "CourierPrime_700Bold",
-    fontSize: 24,
+    fontSize: getFontSize(24),
   },
   subheader: {
     fontFamily: "CourierPrime_700Bold",
-    fontSize: 18,
+    fontSize: getFontSize(18),
   },
   body: {
-    fontSize: 16,
+    fontSize: getFontSize(16),
   },
   footnote: {
-    fontSize: 14,
+    fontSize: getFontSize(14),
   },
 });
 

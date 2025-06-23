@@ -94,6 +94,7 @@ const Button: FC<IButtonProps> = ({
         style={[styles.wrapper, animatedContainerStyle]}
       >
         <Pressable
+          testID="button-pressable-inner"
           disabled={disabled}
           onPress={onPress}
           onPressIn={onPressIn}

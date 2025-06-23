@@ -1,15 +1,10 @@
 import { put, takeEvery } from "redux-saga/effects";
 import { type AxiosResponse } from "axios";
 import { TJobType, GET_ALL_JOBS } from "../types/jobsTypes";
-import {
-  getJobsAction,
-  getJobsErrorAction,
-  getJobsSuccessAction,
-} from "../slices/jobs";
-import { getJobsByProfile, getProfile } from "../../api/services";
+import { getJobsErrorAction, getJobsSuccessAction } from "../slices/jobs";
+import { getJobsByProfile } from "../../api/services";
 
-function* getJobsSaga(action: ReturnType<typeof getJobsAction>) {
-  console.log("get saga");
+function* getJobsSaga() {
   try {
     const response: AxiosResponse<TJobType[]> = yield getJobsByProfile(
       "7f90df6e-b832-44e2-b624-3143d428001f"

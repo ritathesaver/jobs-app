@@ -128,7 +128,7 @@ const JobDetailsScreen: FC = () => {
         <Text>{jobDetails.company.name}</Text>
         <View style={styles.header}>
           <Text option="subheader">{distance}</Text>
-          <Text option="subheader">{hourlyRate} ¢/hour</Text>
+          <Text option="subheader">{hourlyRate} $/hour</Text>
         </View>
         <View style={styles.section}>
           <View style={styles.row}>

@@ -18,7 +18,7 @@ const CardItem: FC<ICardItemProps> = ({
         </Text>
       </View>
       <View style={styles.wageContainer}>
-        <Text>{wagePerHourInCents} ¢/hour</Text>
+        <Text>{wagePerHourInCents} $/hour</Text>
       </View>
 
       <Text style={styles.title}>{`${companyName}, ${branch}`}</Text>

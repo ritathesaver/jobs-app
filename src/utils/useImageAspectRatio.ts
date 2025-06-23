@@ -22,7 +22,6 @@ export function useImageAspectRatio(uri: string | undefined): number | null {
         setAspectRatio(ratio);
       },
       (error) => {
-        console.warn("Failed to get image size:", error);
         setAspectRatio(null);
       }
     );
