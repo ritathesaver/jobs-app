@@ -24,10 +24,11 @@ export const acceptJobByProfile = async (workerID: string, jobId: string) => {
     const response = await axios.get(
       `${API_URL}/${workerID}/job/${jobId}/accept`
     );
-    console.log(response.data, "data1");
-    return response;
-  } catch (error) {
-    return error;
+    return response.data;
+  } catch (error: any) {
+    return {
+      success: false,
+    };
   }
 };
 
@@ -36,9 +37,10 @@ export const rejectJobByProfile = async (workerID: string, jobId: string) => {
     const response = await axios.get(
       `${API_URL}/${workerID}/job/${jobId}/reject`
     );
-    console.log(response.data, "data1");
-    return response;
+    return response.data;
   } catch (error) {
-    return error;
+    return {
+      success: false,
+    };
   }
 };

@@ -29,7 +29,6 @@ const Header: React.FC<IHeaderProps> = ({
           },
         ]}
       >
-        {" "}
         <View style={styles.iconWrapper}>
           {isLeftButtonShown && (
             <TouchableOpacity hitSlop={32} onPress={onPress}>
@@ -37,7 +36,7 @@ const Header: React.FC<IHeaderProps> = ({
             </TouchableOpacity>
           )}
         </View>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{title ?? ""}</Text>
         <View style={styles.iconWrapper} />
       </View>
     </View>

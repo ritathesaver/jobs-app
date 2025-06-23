@@ -1,62 +1,84 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { getJobsAction } from "../../redux/slices/jobs";
-import { jobsDataSelector } from "../../redux/selectors/jobs";
+import {
+  jobsDataSelector,
+  jobsLoadingSelector,
+} from "../../redux/selectors/jobs";
 import { TJobType } from "../../redux/types/jobsTypes";
-import { Image } from "expo-image";
+import Text from "../../components/Text/Text";
+import { getProfileAction } from "../../redux/slices/profile";
+import { JobsScreenNavigationProp } from "../../navigation/types";
+import CardItem from "../../components/CardItem/CardItem";
 
 const JobsScreen: FC = () => {
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
-  const { width } = useWindowDimensions();
+  const navigation = useNavigation<JobsScreenNavigationProp>();
 
   const jobs = useAppSelector(jobsDataSelector);
-
-  console.log(jobs, "JOBS");
+  const isLoading = useAppSelector(jobsLoadingSelector);
 
   useEffect(() => {
     dispatch(getJobsAction());
+    dispatch(getProfileAction());
   }, []);
 
   const navigateToDetails = (id: string) => {
     navigation.navigate("JobDetails", { jobId: id });
   };
 
-  const renderItem = ({ item }: { item: TJobType }) => (
-    <TouchableOpacity
-      onPress={() => navigateToDetails(item.jobId)}
-      style={styles.itemContainer}
-    >
-      <Text style={styles.title}>{item.jobTitle.name}</Text>
-      <Text>{item.company.name}</Text>
-      <View style={{ width, height: 200 }}>
-        <Image
-          contentFit="contain"
-          transition={1000}
-          style={{ flex: 1 }}
-          source={{ uri: item.jobTitle.imageUrl }}
-        />
+  const listEmptyComponent = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.emptyContainer}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.emptyContainer}>
+        <Text option="subheader">No jobs available now, come back later</Text>
       </View>
+    );
+  };
+
+  const renderItem = ({ item }: { item: TJobType }) => (
+    <TouchableOpacity onPress={() => navigateToDetails(item.jobId)}>
+      <CardItem
+        jobName={item.jobTitle.name}
+        wagePerHourInCents={(item.wagePerHourInCents / 100).toFixed(2)}
+        companyName={item.company.name}
+        branch={item.branch}
+        milesToTravel={item.milesToTravel}
+      />
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView>
-      <FlatList
-        data={jobs}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.jobId}
-      />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.wrapper}>
+        <Text style={styles.header} option="header">
+          Jobs for you
+        </Text>
+        <FlatList
+          data={jobs ?? []}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.jobId}
+          ListEmptyComponent={listEmptyComponent}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          contentContainerStyle={{ flexGrow: 1 }}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -64,10 +86,12 @@ const JobsScreen: FC = () => {
 export default JobsScreen;
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    alignItems: "center",
+  container: {
+    flex: 1,
+  },
+  wrapper: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
   title: {
     fontSize: 20,
@@ -75,15 +99,16 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: "center",
   },
-  imageContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
+  emptyContainer: {
+    padding: 24,
     alignItems: "center",
     justifyContent: "center",
   },
-  image: {
-    flex: 1,
+  separator: {
     width: "100%",
-    backgroundColor: "#0553",
+    height: 20,
+  },
+  header: {
+    paddingVertical: 16,
   },
 });
